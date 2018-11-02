@@ -11,7 +11,14 @@ Tests for:
     from_byte_vector
 */
 
+use std::fs;
+use std::path::Path;
 use super::*;
+
+#[test]
+fn to_byte_vector() {
+  
+}
 
 #[test]
 fn new_text_file() {
@@ -47,4 +54,7 @@ fn save_text_file() {
     
     let output_path = "./src/_test_data/texts/output/save_text_file.txt";
     stegray.save(output_path);
+
+    assert!(Path::new(output_path).exists());
+    fs::remove_file(output_path).expect("remove file failed?");
 }

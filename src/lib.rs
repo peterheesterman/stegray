@@ -40,20 +40,19 @@ impl Stegray {
                 fs::write(path, content).expect("Unable to write text file.");
             },
             FileType::PNG => {
-                panic!("Unimplemented")
+                panic!("Unimplemented");
             }
             FileType::UNKNOWN => {
-                panic!("Unknon file type to save!")
+                panic!("Unknon file type to save!");
             }
         }
-        println!("{:?}", self);
-        println!("Saving file to {}", path);
-        // TODO: Write this
+        println!("Saved file to {}", path);
     }
 
     pub fn to_byte_vector(&self) -> Vec<u8> {
         // TODO: Write this
         vec![1]
+        
     }
 
     pub fn from_byte_vector(&self, _data: Vec<u8>) -> Stegray {
