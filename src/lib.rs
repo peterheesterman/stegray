@@ -4,8 +4,12 @@ mod tests;
 mod files;
 mod hasher;
 
+use std::fs;
+use std::str;
+
 use files::FileType;
 
+#[derive(Debug)]
 pub struct Stegray {
     pub file_type: FileType,
     pub length: u64,
@@ -29,7 +33,20 @@ impl Stegray {
         }
     }
 
-    pub fn save(path: &str) {
+    pub fn save(&self, path: &str) {
+        match self.file_type {
+            FileType::Text => {
+                let content = String::from(str::from_utf8(&self.content).unwrap());
+                fs::write(path, content).expect("Unable to write text file.");
+            },
+            FileType::PNG => {
+                panic!("Unimplemented")
+            }
+            FileType::UNKNOWN => {
+                panic!("Unknon file type to save!")
+            }
+        }
+        println!("{:?}", self);
         println!("Saving file to {}", path);
         // TODO: Write this
     }
@@ -39,7 +56,7 @@ impl Stegray {
         vec![1]
     }
 
-    pub fn from_byte_vector(_data: Vec<u8>) -> Stegray {
+    pub fn from_byte_vector(&self, _data: Vec<u8>) -> Stegray {
         // TODO: Write this
         Stegray {
             file_type: FileType::Text,

@@ -20,7 +20,7 @@ fn get_file_type_unkown() {
 #[test]
 fn get_file_string_short() {
     assert_eq!(
-        get_file_string("./src/files/test_data/texts/short.txt"),
+        get_file_string("./src/_test_data/texts/short.txt"),
         "I am first with five\nThen seven in the middle\nFive again to end."
     );
 }
@@ -29,7 +29,7 @@ fn get_file_string_short() {
 #[test]
 fn get_file_content_text_short() {
     assert_eq!(
-        get_file_content("./src/files/test_data/texts/short.txt"),
+        get_file_content("./src/_test_data/texts/short.txt"),
         vec![
             73, 32, 97, 109, 32, 102, 105, 114, 115, 116, 32, 119, 105, 116, 104, 32, 102, 105,
             118, 101, 10, 84, 104, 101, 110, 32, 115, 101, 118, 101, 110, 32, 105, 110, 32, 116,
