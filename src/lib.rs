@@ -11,9 +11,14 @@ use std::str;
 use files::FileType;
 
 #[derive(Debug)]
-pub struct Stegray {
+pub struct StegrayMeta {
     pub file_type: FileType,
     pub length: u32,
+}
+
+#[derive(Debug)]
+pub struct Stegray {
+    pub meta: StegrayMeta,
     pub content: Vec<u8>,
     pub shasum: String,
 }
@@ -29,16 +34,17 @@ impl Stegray {
 
         let length = content.len() as u32 + Stegray::get_meta_length();
 
+        let meta = StegrayMeta { file_type, length };
+
         Stegray {
-            file_type,
-            length,
+            meta,
             content,
             shasum: hasher::get_file_hash(path),
         }
     }
 
     pub fn save(&self, path: &str) {
-        match self.file_type {
+        match self.meta.file_type {
             FileType::Text => {
                 let content = String::from(str::from_utf8(&self.content).unwrap());
                 fs::write(path, content).expect("Unable to write text file.");
@@ -57,8 +63,8 @@ impl Stegray {
     pub fn to_byte_vector(&self) -> Vec<u8> {
         let mut data: Vec<u8> = Vec::new();
 
-        data.push(self.file_type as u8);
-        data.extend_from_slice(&bit_helpers::transform_u32_to_u8_array(self.length));
+        data.push(self.meta.file_type as u8);
+        data.extend_from_slice(&bit_helpers::transform_u32_to_u8_array(self.meta.length));
         data.extend_from_slice(self.content.as_slice());
         data.extend_from_slice(self.shasum.as_bytes());
 
@@ -81,9 +87,10 @@ impl Stegray {
 
         let shasum = String::from(str::from_utf8(&data[content_length + offset..]).unwrap());
 
+        let meta = StegrayMeta { file_type, length };
+
         Stegray {
-            file_type,
-            length,
+            meta,
             content,
             shasum: shasum,
         }

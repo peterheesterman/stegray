@@ -7,10 +7,10 @@ pub fn transform_u32_to_u8_array(x: u32) -> [u8; 4] {
 }
 
 pub fn transform_u8_array_to_u32(four_bytes: &[u8]) -> u32 {
-      (((*four_bytes)[0] as u32) << 24)
-    + (((*four_bytes)[1] as u32) << 16)
-    + (((*four_bytes)[2] as u32) << 8)
-    + (((*four_bytes)[3] as u32) << 0)
+    (((*four_bytes)[0] as u32) << 24)
+        + (((*four_bytes)[1] as u32) << 16)
+        + (((*four_bytes)[2] as u32) << 8)
+        + (((*four_bytes)[3] as u32) << 0)
 }
 
 #[cfg(test)]
@@ -19,10 +19,7 @@ mod tests {
 
     #[test]
     fn transform_u32_to_u8_array_small() {
-        assert_eq!(
-            transform_u32_to_u8_array(4_u32),
-            [0_u8, 0_u8, 0_u8, 4_u8]
-        );
+        assert_eq!(transform_u32_to_u8_array(4_u32), [0_u8, 0_u8, 0_u8, 4_u8]);
     }
 
     #[test]
