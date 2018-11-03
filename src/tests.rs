@@ -16,6 +16,21 @@ use std::fs;
 use std::path::Path;
 
 #[test]
+fn stegraymeta_from_bytes() {
+    let content = [0, 0, 0, 0, 109];
+
+    let computed_meta = StegrayMeta::from_bytes(content);
+
+    let expected_meta = StegrayMeta {
+        file_type: FileType::Text,
+        length: 109,
+    };
+
+    assert_eq!(computed_meta.file_type, expected_meta.file_type);
+    assert_eq!(computed_meta.length, expected_meta.length);
+}
+
+#[test]
 fn to_byte_vector() {
     let content = vec![
         73, 32, 97, 109, 32, 102, 105, 114, 115, 116, 32, 119, 105, 116, 104, 32, 102, 105, 118,

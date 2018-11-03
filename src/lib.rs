@@ -16,6 +16,15 @@ pub struct StegrayMeta {
     pub length: u32,
 }
 
+impl StegrayMeta {
+    pub fn from_bytes(bytes: [u8; 5]) -> StegrayMeta {
+        let file_type = files::get_file_type_from_u8(bytes[0]);
+        let length = bit_helpers::transform_u8_array_to_u32(&bytes[1..5]);
+
+        StegrayMeta { file_type, length }
+    }
+}
+
 #[derive(Debug)]
 pub struct Stegray {
     pub meta: StegrayMeta,
