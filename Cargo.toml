@@ -3,5 +3,12 @@ name = "stegray"
 version = "0.0.1"
 authors = ["Peter Heesterman <heesterman.peter@gmail.com>"]
 
+description = "Data type for steg the command line steganography tool"
+repository = "https://github.com/peterheesterman/stegray"
+readme = "./README.md"
+keywords = ["steganography", "steg", "stegray", "hide", "reveal"]
+categories = ["command-line-utilities", "encoding"]
+license = "MIT"
+
 [dependencies]
 rust-crypto = "0.2.36"
