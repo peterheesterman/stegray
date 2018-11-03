@@ -26,13 +26,13 @@ fn to_byte_vector() {
 
     let stegray = Stegray {
         file_type: FileType::Text,
-        length: 113,
+        length: 109,
         content,
         shasum: String::from("538f5e16ed8412cbb7c2b1e37006e8618f92ff49"),
     };
 
     let expected_bytes = vec![
-        0, 0, 0, 0, 0, 0, 0, 0, 113, 73, 32, 97, 109, 32, 102, 105, 114, 115, 116, 32, 119, 105,
+        0, 0, 0, 0, 109, 73, 32, 97, 109, 32, 102, 105, 114, 115, 116, 32, 119, 105,
         116, 104, 32, 102, 105, 118, 101, 10, 84, 104, 101, 110, 32, 115, 101, 118, 101, 110, 32,
         105, 110, 32, 116, 104, 101, 32, 109, 105, 100, 100, 108, 101, 10, 70, 105, 118, 101, 32,
         97, 103, 97, 105, 110, 32, 116, 111, 32, 101, 110, 100, 46, 53, 51, 56, 102, 53, 101, 49,
@@ -46,7 +46,7 @@ fn to_byte_vector() {
 #[test]
 fn from_byte_vector() {
     let content = vec![
-        0, 0, 0, 0, 0, 0, 0, 0, 113, 73, 32, 97, 109, 32, 102, 105, 114, 115, 116, 32, 119, 105,
+        0, 0, 0, 0, 109, 73, 32, 97, 109, 32, 102, 105, 114, 115, 116, 32, 119, 105,
         116, 104, 32, 102, 105, 118, 101, 10, 84, 104, 101, 110, 32, 115, 101, 118, 101, 110, 32,
         105, 110, 32, 116, 104, 101, 32, 109, 105, 100, 100, 108, 101, 10, 70, 105, 118, 101, 32,
         97, 103, 97, 105, 110, 32, 116, 111, 32, 101, 110, 100, 46, 53, 51, 56, 102, 53, 101, 49,
@@ -65,7 +65,7 @@ fn from_byte_vector() {
 
     let expected_stegray = Stegray {
         file_type: FileType::Text,
-        length: 113,
+        length: 109,
         content: expected_content,
         shasum: String::from("538f5e16ed8412cbb7c2b1e37006e8618f92ff49"),
     };
@@ -85,7 +85,7 @@ fn new_stegray_from_text_file() {
     let stegray = Stegray::new(text_file);
 
     assert_eq!(stegray.file_type, FileType::Text);
-    assert_eq!(stegray.length, 113);
+    assert_eq!(stegray.length, 109);
     assert_eq!(
         stegray.content,
         vec![
@@ -109,7 +109,7 @@ fn save_text_file() {
 
     let stegray = Stegray {
         file_type: FileType::Text,
-        length: 113,
+        length: 109,
         content,
         shasum: String::from("538f5e16ed8412cbb7c2b1e37006e8618f92ff49"),
     };

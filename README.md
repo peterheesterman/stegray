@@ -12,7 +12,7 @@ data: [header_type][header][message]
 header_type: [u4]
 header: 
   original_file_type: [u4],
-  message_length: u64 <--this won't fit video though;
+  message_length: u32 <--this won't fit video though;
   shasum: [u8; ??]
 message: [u8]
 ```

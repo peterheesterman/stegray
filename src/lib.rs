@@ -13,21 +13,21 @@ use files::FileType;
 #[derive(Debug)]
 pub struct Stegray {
     pub file_type: FileType,
-    pub length: u64,
+    pub length: u32,
     pub content: Vec<u8>,
     pub shasum: String,
 }
 
 impl Stegray {
-    pub fn get_meta_length() -> u64 {
-        40 + 8 + 1 // shasum + length + file_type
+    pub fn get_meta_length() -> u32 {
+        40 + 4 + 1 // shasum + length + file_type
     }
 
     pub fn new(path: &str) -> Stegray {
         let file_type = files::get_file_type(&path);
         let content = files::get_file_content(&path);
 
-        let length = content.len() as u64 + Stegray::get_meta_length();
+        let length = content.len() as u32 + Stegray::get_meta_length();
 
         Stegray {
             file_type,
@@ -58,7 +58,7 @@ impl Stegray {
         let mut data: Vec<u8> = Vec::new();
 
         data.push(self.file_type as u8);
-        data.extend_from_slice(&bit_helpers::transform_u64_to_u8_array(self.length));
+        data.extend_from_slice(&bit_helpers::transform_u32_to_u8_array(self.length));
         data.extend_from_slice(self.content.as_slice());
         data.extend_from_slice(self.shasum.as_bytes());
 
@@ -67,15 +67,13 @@ impl Stegray {
 
     pub fn from_byte_vector(data: Vec<u8>) -> Stegray {
         let file_type = files::get_file_type_from_u8(data[0]);
-        let length = bit_helpers::transform_u8_array_to_u64(&data[1..9]);
+        let offset = 5;
+        let length = bit_helpers::transform_u8_array_to_u32(&data[1..offset]);
 
-        // TODO: fix this! usize is not good enough and will cause bugs
-        // if cfg!(target_pointer_width = "32") {} - ??
         let content_length = length as usize - Stegray::get_meta_length() as usize;
 
         let mut content = Vec::new();
 
-        let offset = 9;
         match data.get(offset..content_length + offset) {
             Some(buff) => content.extend_from_slice(buff),
             _ => panic!("Data could not be vectorized"),
