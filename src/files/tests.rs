@@ -1,4 +1,5 @@
-use super::*;
+#[allow(unused_imports)]
+use super::{get_file_content, get_file_string, get_file_type, get_file_type_from_u8, FileType};
 
 // get_file_type
 #[test]
@@ -37,4 +38,24 @@ fn get_file_content_text_short() {
             105, 110, 32, 116, 111, 32, 101, 110, 100, 46
         ]
     );
+}
+
+#[test]
+fn get_file_type_from_u8_text() {
+    assert_eq!(get_file_type_from_u8(0), FileType::Text);
+}
+
+#[test]
+fn get_file_type_from_u8_png() {
+    assert_eq!(get_file_type_from_u8(1), FileType::PNG);
+}
+
+#[test]
+fn get_file_type_from_u8_next() {
+    assert_eq!(get_file_type_from_u8(2), FileType::UNKNOWN);
+}
+
+#[test]
+fn get_file_type_from_u8_unknown() {
+    assert_eq!(get_file_type_from_u8(255), FileType::UNKNOWN);
 }

@@ -11,13 +11,13 @@ pub fn get_file_hash(path: &str) -> String {
         Ok(file) => file,
     };
 
-    let mut data = Vec::new();
+    let mut file_content = Vec::new();
 
-    match file.read_to_end(&mut data) {
+    match file.read_to_end(&mut file_content) {
         Err(why) => panic!("Couldn't read {} because: {}", path, why.description()),
         Ok(_) => {
             let mut sha = Sha1::new();
-            sha.input(&data);
+            sha.input(&file_content);
             sha.result_str()
         }
     }

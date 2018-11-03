@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod tests;
 
+mod bit_helpers;
 mod files;
 mod hasher;
 
@@ -18,12 +19,15 @@ pub struct Stegray {
 }
 
 impl Stegray {
+    pub fn get_meta_length() -> u64 {
+        40 + 8 + 1 // shasum + length + file_type
+    }
+
     pub fn new(path: &str) -> Stegray {
         let file_type = files::get_file_type(&path);
         let content = files::get_file_content(&path);
 
-        let meta_length = 40 + 8 + 1; // shasum + length + file_type
-        let length = (content.len() + meta_length) as u64;
+        let length = content.len() as u64 + Stegray::get_meta_length();
 
         Stegray {
             file_type,
@@ -38,8 +42,9 @@ impl Stegray {
             FileType::Text => {
                 let content = String::from(str::from_utf8(&self.content).unwrap());
                 fs::write(path, content).expect("Unable to write text file.");
-            },
+            }
             FileType::PNG => {
+                // TODO: implement png support
                 panic!("Unimplemented");
             }
             FileType::UNKNOWN => {
@@ -50,18 +55,39 @@ impl Stegray {
     }
 
     pub fn to_byte_vector(&self) -> Vec<u8> {
-        // TODO: Write this
-        vec![1]
-        
+        let mut data: Vec<u8> = Vec::new();
+
+        data.push(self.file_type as u8);
+        data.extend_from_slice(&bit_helpers::transform_u64_to_u8_array(self.length));
+        data.extend_from_slice(self.content.as_slice());
+        data.extend_from_slice(self.shasum.as_bytes());
+
+        data
     }
 
-    pub fn from_byte_vector(&self, _data: Vec<u8>) -> Stegray {
-        // TODO: Write this
+    pub fn from_byte_vector(data: Vec<u8>) -> Stegray {
+        let file_type = files::get_file_type_from_u8(data[0]);
+        let length = bit_helpers::transform_u8_array_to_u64(&data[1..9]);
+
+        // TODO: fix this! usize is not good enough and will cause bugs
+        // if cfg!(target_pointer_width = "32") {} - ??
+        let content_length = length as usize - Stegray::get_meta_length() as usize;
+
+        let mut content = Vec::new();
+
+        let offset = 9;
+        match data.get(offset..content_length + offset) {
+            Some(buff) => content.extend_from_slice(buff),
+            _ => panic!("Data could not be vectorized"),
+        }
+
+        let shasum = String::from(str::from_utf8(&data[content_length + offset..]).unwrap());
+
         Stegray {
-            file_type: FileType::Text,
-            length: 123,
-            content: vec![53, 54, 55],
-            shasum: String::from("3b0a64b1ec39cb1d04ebb30858566c653b57a4d4"),
+            file_type,
+            length,
+            content,
+            shasum: shasum,
         }
     }
 }

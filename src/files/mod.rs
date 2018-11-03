@@ -4,11 +4,21 @@ use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub enum FileType {
-    Text,
-    PNG,
-    UNKNOWN,
+    // Lets be explicit with mapping so that we don't mess it up in future
+    Text = 0,
+    PNG = 1,
+    UNKNOWN = 255,
+}
+
+pub fn get_file_type_from_u8(value: u8) -> FileType {
+    match value {
+        value if value == FileType::Text as u8 => FileType::Text,
+        value if value == FileType::PNG as u8 => FileType::PNG,
+        value if value == FileType::UNKNOWN as u8 => FileType::UNKNOWN,
+        _ => FileType::UNKNOWN,
+    }
 }
 
 pub fn get_file_content(path: &str) -> Vec<u8> {
@@ -23,7 +33,7 @@ pub fn get_file_content(path: &str) -> Vec<u8> {
             contents.extend_from_slice(bytes);
         }
         FileType::PNG => {
-            // TODO: Write this
+            // TODO: implement png support
             panic!("PNG support coming soon");
         }
         FileType::UNKNOWN => panic!("Bad file type!"),
